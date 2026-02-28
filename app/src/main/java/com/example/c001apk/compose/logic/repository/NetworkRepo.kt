@@ -9,6 +9,8 @@ import com.example.c001apk.compose.logic.model.FeedContentResponse
 import com.example.c001apk.compose.logic.model.HomeFeedResponse
 import com.example.c001apk.compose.logic.network.ApiService
 import com.example.c001apk.compose.logic.state.LoadingState
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -115,7 +117,8 @@ class NetworkRepo @Inject constructor(
 
     suspend fun getAppsUpdate(pkgs: String) = flowUpdateList {
         val multipartBody = MultipartBody.Part.createFormData("pkgs", pkgs)
-        apiService.getAppsUpdate(multipartBody).await()
+        val responseBody = apiService.getAppsUpdate(multipartBody).await()
+        parseAppsUpdate(responseBody.string())
     }
 
     suspend fun getProfile(uid: String) = fire {
@@ -366,6 +369,20 @@ class NetworkRepo @Inject constructor(
         }
         emit(result)
     }.flowOn(Dispatchers.IO)
+
+    private fun parseAppsUpdate(raw: String): List<HomeFeedResponse.Data> {
+        val payload = raw.trim()
+        if (payload.isEmpty()) return emptyList()
+        val gson = Gson()
+        val listType = object : TypeToken<List<HomeFeedResponse.Data>>() {}.type
+        return if (payload.startsWith("[")) {
+            gson.fromJson(payload, listType) ?: emptyList()
+        } else {
+            val rootType = object : TypeToken<HomeFeedResponse>() {}.type
+            val response: HomeFeedResponse? = gson.fromJson(payload, rootType)
+            response?.data ?: emptyList()
+        }
+    }
 
     private fun flowData(block: suspend () -> FeedContentResponse) = flow {
         val result = try {
