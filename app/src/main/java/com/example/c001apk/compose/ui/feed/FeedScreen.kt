@@ -28,14 +28,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -78,6 +76,7 @@ import com.example.c001apk.compose.ui.component.cards.FeedHeader
 import com.example.c001apk.compose.ui.component.cards.FeedReplyCard
 import com.example.c001apk.compose.ui.component.cards.FeedReplySortCard
 import com.example.c001apk.compose.ui.component.cards.LoadingCard
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.feed.reply.ReplyActivity
 import com.example.c001apk.compose.util.CookieUtil.isLogin
 import com.example.c001apk.compose.util.ReportType
@@ -91,6 +90,7 @@ import com.example.c001apk.compose.util.makeToast
 import com.example.c001apk.compose.util.noRippleClickable
 import com.example.c001apk.compose.util.shareText
 import kotlinx.coroutines.launch
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/4
@@ -255,12 +255,7 @@ fun FeedScreen(
                 actions = {
                     if (viewModel.feedState is LoadingState.Success) {
                         Box(Modifier.wrapContentSize(Alignment.TopEnd)) {
-                            IconButton(onClick = { dropdownMenuExpanded = true }) {
-                                Icon(
-                                    Icons.Default.MoreVert,
-                                    contentDescription = null
-                                )
-                            }
+                            MoreMenuButton { dropdownMenuExpanded = true }
                             DropdownMenu(
                                 expanded = dropdownMenuExpanded,
                                 onDismissRequest = { dropdownMenuExpanded = false }
@@ -329,7 +324,7 @@ fun FeedScreen(
                     exit = slideOutVertically { it * 2 }
                 ) {
                     FloatingActionButton(
-                        onClick = {
+                        onClick = rememberHapticClick {
                             viewModel.replyId = viewModel.id
                             viewModel.replyUid = viewModel.feedUid
                             viewModel.replyName = viewModel.feedUsername

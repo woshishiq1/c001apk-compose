@@ -26,6 +26,8 @@ import com.example.c001apk.compose.logic.providable.LocalUserPreferences
 import com.example.c001apk.compose.logic.repository.UserPreferencesRepository
 import com.example.c001apk.compose.ui.theme.C001apkComposeTheme
 import com.example.c001apk.compose.util.CookieUtil.apiVersion
+import com.example.c001apk.compose.util.CookieUtil.hapticFeedback
+import com.example.c001apk.compose.util.CookieUtil.hapticStrength
 import com.example.c001apk.compose.util.CookieUtil.imageFilter
 import com.example.c001apk.compose.util.CookieUtil.imageQuality
 import com.example.c001apk.compose.util.CookieUtil.isDarkMode
@@ -135,6 +137,8 @@ class MainActivity : ComponentActivity() {
                 pureBlack = preferences.pureBlack
                 fontScale = preferences.fontScale
                 contentScale = preferences.contentScale
+                hapticFeedback = preferences.hapticFeedback
+                hapticStrength = preferences.hapticStrength
 
                 C001apkComposeTheme(
                     darkTheme = preferences.isDarkMode(),

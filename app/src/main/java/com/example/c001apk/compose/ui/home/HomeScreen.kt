@@ -43,6 +43,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import com.example.c001apk.compose.R
 import com.example.c001apk.compose.logic.model.UpdateCheckItem
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.feed.reply.ReplyActivity
 import com.example.c001apk.compose.ui.home.app.AppListScreen
 import com.example.c001apk.compose.ui.home.feed.HomeFeedScreen
@@ -110,7 +111,7 @@ fun HomeScreen(
                     exit = slideOutVertically { it * 2 }
                 ) {
                     FloatingActionButton(
-                        onClick = {
+                        onClick = rememberHapticClick {
                             val intent = Intent(context, ReplyActivity::class.java)
                             intent.putExtra("type", "createFeed")
                             val animationBundle = ActivityOptionsCompat.makeCustomAnimation(

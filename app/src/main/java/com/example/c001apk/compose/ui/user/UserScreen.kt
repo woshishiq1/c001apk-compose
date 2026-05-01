@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
@@ -64,6 +63,7 @@ import com.example.c001apk.compose.util.copyText
 import com.example.c001apk.compose.util.getShareText
 import com.example.c001apk.compose.util.makeToast
 import com.example.c001apk.compose.util.shareText
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/4
@@ -127,12 +127,7 @@ fun UserScreen(
                                 Icon(Icons.Default.Search, contentDescription = null)
                             }
                             Box {
-                                IconButton(onClick = { dropdownMenuExpanded = true }) {
-                                    Icon(
-                                        Icons.Default.MoreVert,
-                                        contentDescription = null
-                                    )
-                                }
+                                MoreMenuButton { dropdownMenuExpanded = true }
                                 DropdownMenu(
                                     expanded = dropdownMenuExpanded,
                                     onDismissRequest = { dropdownMenuExpanded = false }

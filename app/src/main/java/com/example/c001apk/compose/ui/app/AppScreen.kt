@@ -21,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -61,6 +60,7 @@ import com.example.c001apk.compose.logic.state.LoadingState
 import com.example.c001apk.compose.ui.component.BackButton
 import com.example.c001apk.compose.ui.component.cards.AppInfoCard
 import com.example.c001apk.compose.ui.component.cards.LoadingCard
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.feed.reply.ReplyActivity
 import com.example.c001apk.compose.util.CookieUtil.isLogin
 import com.example.c001apk.compose.util.ReportType
@@ -72,6 +72,7 @@ import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ExperimentalToolbarApi
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/10
@@ -146,12 +147,7 @@ fun AppScreen(
                                 Icon(Icons.Default.Search, contentDescription = null)
                             }
                             Box {
-                                IconButton(onClick = { dropdownMenuExpanded = true }) {
-                                    Icon(
-                                        Icons.Default.MoreVert,
-                                        contentDescription = null
-                                    )
-                                }
+                                MoreMenuButton { dropdownMenuExpanded = true }
                                 DropdownMenu(
                                     expanded = dropdownMenuExpanded,
                                     onDismissRequest = { dropdownMenuExpanded = false }
@@ -323,7 +319,7 @@ fun AppScreen(
                     .padding(20.dp)
             ) {
                 FloatingActionButton(
-                    onClick = {
+                    onClick = rememberHapticClick {
                         val intent = Intent(context, ReplyActivity::class.java)
                         intent.putExtra("type", "createFeed")
                         intent.putExtra("targetType", "apk")

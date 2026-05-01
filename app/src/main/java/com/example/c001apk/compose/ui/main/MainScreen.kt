@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.c001apk.compose.logic.model.UpdateCheckItem
 import com.example.c001apk.compose.ui.component.SlideTransition
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.home.HomeScreen
 import com.example.c001apk.compose.ui.message.MessageScreen
 import com.example.c001apk.compose.ui.settings.SettingsScreen
@@ -65,6 +66,7 @@ fun MainScreen(
     )
 
     val savableStateHolder = rememberSaveableStateHolder()
+    val performHapticClick = rememberHapticClick {}
     var refreshState by remember { mutableStateOf(false) }
 
     val customNavSuiteType = when (widthSizeClass) {
@@ -108,6 +110,7 @@ fun MainScreen(
                     label = { Text(text = stringResource(id = screen.stringId!!)) },
                     selected = selectIndex == screens.indexOf(screen),
                     onClick = {
+                        performHapticClick()
                         with(screens.indexOf(screen)) {
                             if (selectIndex == 0 && this == 0) {
                                 refreshState = true

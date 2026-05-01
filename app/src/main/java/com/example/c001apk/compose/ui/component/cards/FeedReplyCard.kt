@@ -48,6 +48,7 @@ import com.example.c001apk.compose.ui.component.CoilLoader
 import com.example.c001apk.compose.ui.component.IconText
 import com.example.c001apk.compose.ui.component.LinkText
 import com.example.c001apk.compose.ui.component.NineImageView
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.theme.cardBg
 import com.example.c001apk.compose.util.CookieUtil
 import com.example.c001apk.compose.util.CookieUtil.isLogin
@@ -77,6 +78,7 @@ fun FeedReplyCard(
 ) {
 
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
+    val performHapticClick = rememberHapticClick {}
 
     val isFeedReply by lazy { data.fetchType == "feed_reply" }
     val isLikeReply by lazy { data.likeUserInfo != null }
@@ -100,6 +102,7 @@ fun FeedReplyCard(
                         // no action
                     } else if (isFeedReply) {
                         if (isLogin) {
+                            performHapticClick()
                             onReply?.let {
                                 it(
                                     data.id.orEmpty(),
@@ -554,6 +557,7 @@ fun ReplyRows(
 ) {
 
     var dropdownMenuExpanded by remember { mutableIntStateOf(-1) }
+    val performHapticClick = rememberHapticClick {}
 
     Column(
         modifier = modifier
@@ -575,6 +579,7 @@ fun ReplyRows(
                         .combinedClickable(
                             onClick = {
                                 if (isLogin) {
+                                    performHapticClick()
                                     onReply(
                                         reply.id.orEmpty(),
                                         reply.username.orEmpty()

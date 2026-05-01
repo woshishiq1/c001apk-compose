@@ -20,13 +20,11 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -54,6 +52,7 @@ import com.example.c001apk.compose.util.ReportType
 import com.example.c001apk.compose.util.decode
 import com.example.c001apk.compose.util.noRippleClickable
 import kotlinx.coroutines.launch
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/9
@@ -180,12 +179,7 @@ fun SearchResultScreen(
                         exit = fadeOut()
                     ) {
                         Box {
-                            IconButton(onClick = { dropdownMenuExpanded = true }) {
-                                Icon(
-                                    Icons.Default.MoreVert,
-                                    contentDescription = null
-                                )
-                            }
+                            MoreMenuButton { dropdownMenuExpanded = true }
                             DropdownMenu(
                                 expanded = dropdownMenuExpanded,
                                 onDismissRequest = { dropdownMenuExpanded = false }

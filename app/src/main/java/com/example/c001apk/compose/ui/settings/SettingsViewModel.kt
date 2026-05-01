@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.c001apk.compose.FollowType
 import com.example.c001apk.compose.ThemeMode
 import com.example.c001apk.compose.ThemeType
+import com.example.c001apk.compose.logic.model.HapticStrength
 import com.example.c001apk.compose.logic.repository.UserPreferencesRepository
 import com.example.c001apk.compose.ui.base.PrefsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -195,6 +196,18 @@ class SettingsViewModel @Inject constructor(
     fun setPaletteStyle(value: Int) {
         viewModelScope.launch {
             userPreferencesRepository.setPaletteStyle(value)
+        }
+    }
+
+    fun setHapticFeedback(value: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setHapticFeedback(value)
+        }
+    }
+
+    fun setHapticStrength(value: HapticStrength) {
+        viewModelScope.launch {
+            userPreferencesRepository.setHapticStrength(value)
         }
     }
 

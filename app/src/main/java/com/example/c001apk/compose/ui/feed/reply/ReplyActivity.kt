@@ -71,6 +71,7 @@ import com.example.c001apk.compose.util.OnTextInputListener
 import com.example.c001apk.compose.util.OssUploadUtil.ossUpload
 import com.example.c001apk.compose.util.dp
 import com.example.c001apk.compose.util.makeToast
+import com.example.c001apk.compose.util.performConfiguredHapticFeedback
 import com.example.c001apk.compose.view.SmoothInputLayout
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.MaterialColors
@@ -827,6 +828,11 @@ class ReplyActivity : AppCompatActivity(),
                 ViewCompat.performHapticFeedback(view, HapticFeedbackConstantsCompat.CONFIRM)
 
             R.id.publish -> {
+                performConfiguredHapticFeedback(
+                    fallback = {
+                        ViewCompat.performHapticFeedback(view, HapticFeedbackConstantsCompat.CONFIRM)
+                    }
+                )
                 if (type == "createFeed") {
                     viewModel.replyAndFeedData["id"] = ""
                     viewModel.replyAndFeedData["message"] = binding.editText.text.toString()

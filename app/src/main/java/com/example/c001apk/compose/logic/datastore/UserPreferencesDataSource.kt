@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import com.example.c001apk.compose.FollowType
 import com.example.c001apk.compose.ThemeMode
 import com.example.c001apk.compose.ThemeType
+import com.example.c001apk.compose.logic.model.HapticStrength
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -175,6 +176,14 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setPaletteStyle(value: Int) = withContext(Dispatchers.IO) {
         userPreferences.updateData { it.copy(paletteStyle = value) }
+    }
+
+    suspend fun setHapticFeedback(value: Boolean) = withContext(Dispatchers.IO) {
+        userPreferences.updateData { it.copy(hapticFeedback = value) }
+    }
+
+    suspend fun setHapticStrength(value: HapticStrength) = withContext(Dispatchers.IO) {
+        userPreferences.updateData { it.copy(hapticStrength = value) }
     }
 
 }

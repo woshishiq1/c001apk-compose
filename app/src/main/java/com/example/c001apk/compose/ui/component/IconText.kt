@@ -28,6 +28,9 @@ fun IconText(
     isLike: Boolean = false,
 ) {
 
+    val hapticClick = rememberHapticClick {
+        onClick?.invoke()
+    }
     val color = if (isLike) MaterialTheme.colorScheme.primary
     else MaterialTheme.colorScheme.outline
 
@@ -64,7 +67,7 @@ fun IconText(
             val tmp = if (onClick == null) modifier
             else modifier
                 .noRippleClickable {
-                    onClick()
+                    hapticClick()
                 }
             tmp
         }

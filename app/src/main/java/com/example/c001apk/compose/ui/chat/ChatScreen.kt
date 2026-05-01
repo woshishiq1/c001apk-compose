@@ -36,7 +36,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.automirrored.outlined.Backspace
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material3.CardDefaults
@@ -104,6 +103,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/19
@@ -205,9 +205,7 @@ fun ChatScreen(
                 title = { Text(text = username) },
                 actions = {
                     Box {
-                        IconButton(onClick = { dropdownMenuExpanded = true }) {
-                            Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
-                        }
+                        MoreMenuButton { dropdownMenuExpanded = true }
                         DropdownMenu(
                             expanded = dropdownMenuExpanded,
                             onDismissRequest = { dropdownMenuExpanded = false }) {

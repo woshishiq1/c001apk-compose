@@ -4,6 +4,7 @@ import com.example.c001apk.compose.FollowType
 import com.example.c001apk.compose.ThemeMode
 import com.example.c001apk.compose.ThemeType
 import com.example.c001apk.compose.logic.datastore.UserPreferencesDataSource
+import com.example.c001apk.compose.logic.model.HapticStrength
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -97,5 +98,11 @@ class UserPreferencesRepository @Inject constructor(
     suspend fun setSeedColor(value: String) = userPreferencesDataSource.setSeedColor(value)
 
     suspend fun setPaletteStyle(value: Int) = userPreferencesDataSource.setPaletteStyle(value)
+
+    suspend fun setHapticFeedback(value: Boolean) =
+        userPreferencesDataSource.setHapticFeedback(value)
+
+    suspend fun setHapticStrength(value: HapticStrength) =
+        userPreferencesDataSource.setHapticStrength(value)
 
 }

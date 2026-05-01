@@ -45,6 +45,8 @@ message UserPreferences {
   ThemeType themeType = 39;
   string seedColor = 40;
   int32 paletteStyle = 41;
+  bool disableHapticFeedback = 42;
+  int32 hapticStrength = 43;
 }
 
 enum ThemeType{

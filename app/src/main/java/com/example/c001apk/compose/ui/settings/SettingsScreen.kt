@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Feed
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.AllInclusive
 import androidx.compose.material.icons.outlined.Block
@@ -38,6 +37,7 @@ import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.TravelExplore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
@@ -45,8 +45,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -84,9 +82,11 @@ import com.example.c001apk.compose.ThemeMode
 import com.example.c001apk.compose.ThemeType
 import com.example.c001apk.compose.constant.Constants.URL_SOURCE_CODE
 import com.example.c001apk.compose.constant.Constants.URL_SOURCE_CODE_FORK
+import com.example.c001apk.compose.logic.model.HapticStrength
 import com.example.c001apk.compose.logic.providable.LocalUserPreferences
 import com.example.c001apk.compose.ui.blacklist.BlackListType
 import com.example.c001apk.compose.ui.component.HtmlText
+import com.example.c001apk.compose.ui.component.MoreMenuButton
 import com.example.c001apk.compose.ui.component.icons.Swatch
 import com.example.c001apk.compose.ui.component.settings.BasicListItem
 import com.example.c001apk.compose.ui.component.settings.DropdownListItem
@@ -122,6 +122,7 @@ fun SettingsScreen(
     val imageQualityList by lazy { listOf("网络自适应", "原图", "普清") }
     val themeList by lazy { listOf("跟随系统", "总是开启", "总是关闭") }
     val followList by lazy { listOf("全部", "好友", "话题", "数码", "应用") }
+    val hapticStrengthList by lazy { HapticStrength.options.map { it.label } }
 
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
@@ -131,6 +132,7 @@ fun SettingsScreen(
     var showImageQualityDialog by remember { mutableStateOf(false) }
     var showCleanCacheDialog by remember { mutableStateOf(false) }
     var showThemeTypeDialog by remember { mutableStateOf(false) }
+    var showHapticStrengthDialog by remember { mutableStateOf(false) }
     var cacheSize by remember { mutableStateOf(getTotalCacheSize(context)) }
 
     Scaffold(
@@ -140,12 +142,7 @@ fun SettingsScreen(
                 title = { Text(text = "设置") },
                 actions = {
                     Box(Modifier.wrapContentSize(Alignment.TopEnd)) {
-                        IconButton(onClick = { dropdownMenuExpanded = true }) {
-                            Icon(
-                                Icons.Default.MoreVert,
-                                contentDescription = Icons.Default.MoreVert.name
-                            )
-                        }
+                        MoreMenuButton { dropdownMenuExpanded = true }
 
                         DropdownMenu(
                             expanded = dropdownMenuExpanded,
@@ -365,6 +362,20 @@ fun SettingsScreen(
             }*/
 
             BasicListItem(leadingText = "其他")
+            SwitchListItem(
+                value = prefs.hapticFeedback,
+                leadingImageVector = Icons.Outlined.TouchApp,
+                headlineText = "触感反馈",
+            ) {
+                viewModel.setHapticFeedback(it)
+            }
+            BasicListItem(
+                leadingImageVector = Icons.Outlined.TouchApp,
+                headlineText = "触感强度",
+                supportingText = prefs.hapticStrength.label,
+            ) {
+                showHapticStrengthDialog = true
+            }
             BasicListItem(
                 leadingImageVector = Icons.Outlined.AllInclusive,
                 headlineText = "关于",
@@ -473,6 +484,21 @@ fun SettingsScreen(
                     onClean = {
                         clearAllCache(context)
                         cacheSize = "0 B"
+                    }
+                )
+            }
+
+            showHapticStrengthDialog -> {
+                ListItemDialog(
+                    title = "触感强度",
+                    list = hapticStrengthList,
+                    selected = HapticStrength.options.indexOf(prefs.hapticStrength),
+                    onDismiss = {
+                        showHapticStrengthDialog = false
+                    },
+                    setData = {
+                        showHapticStrengthDialog = false
+                        viewModel.setHapticStrength(HapticStrength.options[it])
                     }
                 )
             }

@@ -5,6 +5,7 @@ import com.example.c001apk.compose.constant.Constants.EMPTY_STRING
 import com.example.c001apk.compose.constant.Constants.VERSION_CODE
 import com.example.c001apk.compose.constant.Constants.VERSION_NAME
 import com.example.c001apk.compose.ThemeType
+import com.example.c001apk.compose.logic.model.HapticStrength
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/3
@@ -51,5 +52,7 @@ object CookieUtil {
     var pureBlack = false
     var fontScale = 1.0f
     var contentScale = 1.0f
+    var hapticFeedback = true
+    var hapticStrength = HapticStrength.Medium
 
 }

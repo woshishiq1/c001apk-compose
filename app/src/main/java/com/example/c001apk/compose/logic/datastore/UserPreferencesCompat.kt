@@ -10,6 +10,7 @@ import com.example.c001apk.compose.constant.Constants.API_VERSION
 import com.example.c001apk.compose.constant.Constants.EMPTY_STRING
 import com.example.c001apk.compose.constant.Constants.VERSION_CODE
 import com.example.c001apk.compose.constant.Constants.VERSION_NAME
+import com.example.c001apk.compose.logic.model.HapticStrength
 
 data class UserPreferencesCompat(
     val themeMode: ThemeMode,
@@ -53,6 +54,8 @@ data class UserPreferencesCompat(
     val themeType: ThemeType,
     val seedColor: String,
     val paletteStyle: Int,
+    val hapticFeedback: Boolean,
+    val hapticStrength: HapticStrength,
 ) {
     constructor(original: UserPreferences) : this(
         themeMode = original.themeMode,
@@ -96,6 +99,8 @@ data class UserPreferencesCompat(
         themeType = original.themeType,
         seedColor = original.seedColor,
         paletteStyle = original.paletteStyle,
+        hapticFeedback = !original.disableHapticFeedback,
+        hapticStrength = HapticStrength.fromProtoValue(original.hapticStrength),
     )
 
     @Composable
@@ -147,6 +152,8 @@ data class UserPreferencesCompat(
         .setThemeType(themeType)
         .setSeedColor(seedColor)
         .setPaletteStyle(paletteStyle)
+        .setDisableHapticFeedback(!hapticFeedback)
+        .setHapticStrength(hapticStrength.protoValue)
         .build()
 
     companion object {
@@ -192,6 +199,8 @@ data class UserPreferencesCompat(
             themeType = ThemeType.Default,
             seedColor = EMPTY_STRING,
             paletteStyle = 0,
+            hapticFeedback = true,
+            hapticStrength = HapticStrength.Medium,
         )
     }
 }

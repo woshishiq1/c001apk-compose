@@ -3,6 +3,7 @@ package com.example.c001apk.compose.ui.component.settings
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 
 @Composable
 fun SwitchListItem(
@@ -12,6 +13,10 @@ fun SwitchListItem(
     supportingText: String? = null,
     onValueChanged: (value: Boolean) -> Unit
 ) {
+    val performHaptic = rememberHapticClick {}
+    val toggle = rememberHapticClick {
+        onValueChanged(!value)
+    }
     BasicListItem(
         leadingImageVector = leadingImageVector,
         headlineText = headlineText,
@@ -20,11 +25,12 @@ fun SwitchListItem(
             Switch(
                 checked = value,
                 onCheckedChange = {
+                    performHaptic()
                     onValueChanged(it)
                 },
             )
         }
     ) {
-        onValueChanged(!value)
+        toggle()
     }
 }
