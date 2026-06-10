@@ -55,6 +55,9 @@ import com.example.c001apk.compose.util.CookieUtil.xAppDevice
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+
 /**
  * Created by bggRGjQaUbCoE on 2024/5/29
  */
@@ -89,6 +92,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setupStableStatusBarInsets()
 
+        val initialPreferences = runBlocking {
+            userPreferencesRepository.data.first()
+        }
+
         setContent {
             navController = rememberNavController()
 
@@ -96,7 +103,7 @@ class MainActivity : ComponentActivity() {
 
             val userPreferences by userPreferencesRepository.data
                 .collectAsStateWithLifecycle(
-                    initialValue = null,
+                    initialValue = initialPreferences,
                     lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
                 )
 
