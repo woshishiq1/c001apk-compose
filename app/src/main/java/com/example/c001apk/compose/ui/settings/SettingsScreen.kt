@@ -87,6 +87,7 @@ import com.example.c001apk.compose.logic.providable.LocalUserPreferences
 import com.example.c001apk.compose.ui.blacklist.BlackListType
 import com.example.c001apk.compose.ui.component.HtmlText
 import com.example.c001apk.compose.ui.component.MoreMenuButton
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import com.example.c001apk.compose.ui.component.icons.Swatch
 import com.example.c001apk.compose.ui.component.settings.BasicListItem
 import com.example.c001apk.compose.ui.component.settings.DropdownListItem
@@ -134,6 +135,9 @@ fun SettingsScreen(
     var showThemeTypeDialog by remember { mutableStateOf(false) }
     var showHapticStrengthDialog by remember { mutableStateOf(false) }
     var cacheSize by remember { mutableStateOf(getTotalCacheSize(context)) }
+    val showHapticStrengthDialogClick = rememberHapticClick {
+        showHapticStrengthDialog = true
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -373,9 +377,8 @@ fun SettingsScreen(
                 leadingImageVector = Icons.Outlined.TouchApp,
                 headlineText = "触感强度",
                 supportingText = prefs.hapticStrength.label,
-            ) {
-                showHapticStrengthDialog = true
-            }
+                onClick = showHapticStrengthDialogClick
+            )
             BasicListItem(
                 leadingImageVector = Icons.Outlined.AllInclusive,
                 headlineText = "关于",
@@ -496,6 +499,7 @@ fun SettingsScreen(
                     onDismiss = {
                         showHapticStrengthDialog = false
                     },
+                    hapticStrengthForIndex = { HapticStrength.options[it] },
                     setData = {
                         showHapticStrengthDialog = false
                         viewModel.setHapticStrength(HapticStrength.options[it])
@@ -553,6 +557,7 @@ fun ListItemDialog(
     list: List<String>,
     selected: Int,
     onDismiss: () -> Unit,
+    hapticStrengthForIndex: ((Int) -> HapticStrength)? = null,
     setData: (Int) -> Unit
 ) {
     AlertDialog(
@@ -568,7 +573,11 @@ fun ListItemDialog(
         text = {
             LazyColumn {
                 itemsIndexed(list) { index, title ->
-                    ListItemDialogItem(title, selected == index) {
+                    ListItemDialogItem(
+                        title = title,
+                        selected = selected == index,
+                        hapticStrength = hapticStrengthForIndex?.invoke(index),
+                    ) {
                         setData(index)
                     }
                 }
@@ -578,11 +587,19 @@ fun ListItemDialog(
 }
 
 @Composable
-fun ListItemDialogItem(title: String, selected: Boolean, onClick: () -> Unit) {
+fun ListItemDialogItem(
+    title: String,
+    selected: Boolean,
+    hapticStrength: HapticStrength? = null,
+    onClick: () -> Unit
+) {
+    val hapticClick = rememberHapticClick(strength = hapticStrength) {
+        onClick()
+    }
     Row(
-        modifier = Modifier.clickable { onClick() }
+        modifier = Modifier.clickable { hapticClick() }
     ) {
-        RadioButton(selected = selected, onClick = { onClick() })
+        RadioButton(selected = selected, onClick = { hapticClick() })
         Text(
             modifier = Modifier
                 .fillMaxWidth()
