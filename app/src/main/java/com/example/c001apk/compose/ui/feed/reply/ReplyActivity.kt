@@ -167,7 +167,7 @@ class ReplyActivity : AppCompatActivity(),
             val isResized = rootHeight > 0 &&
                 contentHeight > 0 &&
                 contentHeight + sysInset < rootHeight
-            val useImeInset = isImeVisible
+            val useImeInset = isImeVisible || imeInset > 0
             val bottomInset = if (useImeInset) max(imeInset, sysInset) else sysInset
             if (isImeVisible) {
                 isEmojiPanelVisible = false
