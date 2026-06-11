@@ -141,7 +141,8 @@ public class MojitoView extends FrameLayout {
             mAlpha = 0f;
             backgroundView.setAlpha(mAlpha);
             contentLayout.setAlpha(0f);
-            contentLayout.animate().alpha(1f).setDuration(animationDuration).start();
+            contentLayout.animate().alpha(1f).setDuration(animationDuration)
+                    .setInterpolator(new android.view.animation.PathInterpolator(0.05f, 0.7f, 0.1f, 1.0f)).start();
             backgroundView.animate().alpha(1f).setDuration(animationDuration).start();
         }
         setShowEndParams();
@@ -512,6 +513,11 @@ public class MojitoView extends FrameLayout {
             }
         });
         valueAnimator.setDuration(animationDuration);
+        if (isToZero) {
+            valueAnimator.setInterpolator(new android.view.animation.PathInterpolator(0.3f, 0f, 0.8f, 0.15f));
+        } else {
+            valueAnimator.setInterpolator(new android.view.animation.PathInterpolator(0.05f, 0.7f, 0.1f, 1.0f));
+        }
         valueAnimator.start();
     }
 

@@ -33,6 +33,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -301,7 +302,7 @@ fun SearchResultScreen(
                     tabList.forEachIndexed { index, tab ->
                         Tab(
                             selected = pagerState.currentPage == index,
-                            onClick = {
+                            onClick = rememberHapticClick {
                                 if (pagerState.currentPage == index) {
                                     refreshState = true
                                 }

@@ -2,7 +2,8 @@ package com.example.c001apk.compose.ui.main
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
@@ -84,8 +85,8 @@ fun MainScreen(
                                 androidx.compose.animation.AnimatedVisibility(
                                     visible = if (index == 1) badge > 0
                                     else false,
-                                    enter = scaleIn(animationSpec = tween(250)),
-                                    exit = scaleOut(animationSpec = tween(250))
+                                    enter = scaleIn(animationSpec = spring(stiffness = Spring.StiffnessMediumLow)),
+                                    exit = scaleOut(animationSpec = spring(stiffness = Spring.StiffnessMediumLow))
                                 ) {
                                     Badge(
                                         modifier = Modifier

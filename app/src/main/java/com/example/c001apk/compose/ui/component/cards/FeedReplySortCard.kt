@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.c001apk.compose.ui.component.rememberHapticClick
 
 /**
  * Created by bggRGjQaUbCoE on 2024/6/12
@@ -108,9 +109,7 @@ fun FeedReplySortCardItem(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
-            .clickable {
-                updateSortReply()
-            }
+            .clickable(onClick = rememberHapticClick { updateSortReply() })
             .background(
                 if (isSelected)
                     MaterialTheme.colorScheme.secondaryContainer

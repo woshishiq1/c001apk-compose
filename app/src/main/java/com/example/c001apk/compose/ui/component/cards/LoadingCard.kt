@@ -74,10 +74,16 @@ fun LoadingCard(
                 color = MaterialTheme.colorScheme.outline,
             )
 
-            Type.INDICATOR -> CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                strokeCap = StrokeCap.Round
-            )
+            Type.INDICATOR -> androidx.compose.animation.AnimatedVisibility(
+                visible = type.first == Type.INDICATOR,
+                enter = androidx.compose.animation.fadeIn(animationSpec = androidx.compose.animation.core.tween(400)),
+                exit = androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(200)),
+                modifier = Modifier.align(Alignment.Center)
+            ) {
+                CircularProgressIndicator(
+                    strokeCap = StrokeCap.Round
+                )
+            }
 
             Type.NONE -> {}
         }

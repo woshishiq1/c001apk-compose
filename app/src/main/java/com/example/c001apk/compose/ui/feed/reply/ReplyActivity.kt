@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.HapticFeedbackConstantsCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
@@ -148,46 +149,81 @@ class ReplyActivity : AppCompatActivity(),
         if (materialYou)
             DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
         )
         binding.main.isFocusable = false
         binding.main.isFocusableInTouchMode = false
         baseRootPaddingBottom = binding.main.paddingBottom
+        
+        var imeAnimating = false
+        ViewCompat.setWindowInsetsAnimationCallback(binding.main, object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
+            override fun onPrepare(animation: WindowInsetsAnimationCompat) {
+                imeAnimating = true
+                super.onPrepare(animation)
+            }
+            override fun onProgress(insets: WindowInsetsCompat, runningAnimations: MutableList<WindowInsetsAnimationCompat>): WindowInsetsCompat {
+                val imeInset = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                val navInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                val useImeInset = insets.isVisible(WindowInsetsCompat.Type.ime()) || imeInset > 0
+                val translation = if (useImeInset) -max(0, imeInset - navInset).toFloat() else 0f
+                binding.inputLayout.translationY = translation
+                if (useImeInset && imeInset > 0) {
+                    imeScrimDrawable.setBounds(
+                        0,
+                        binding.main.height - (imeInset - navInset),
+                        binding.main.width,
+                        binding.main.height
+                    )
+                    binding.main.overlay.remove(imeScrimDrawable)
+                    binding.main.overlay.add(imeScrimDrawable)
+                } else {
+                    binding.main.overlay.remove(imeScrimDrawable)
+                }
+                return insets
+            }
+            override fun onEnd(animation: WindowInsetsAnimationCompat) {
+                imeAnimating = false
+                super.onEnd(animation)
+            }
+        })
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { _, insets ->
             val imeInset = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            val navInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             val sysInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             val isImeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val rootHeight = binding.main.rootView.height
-            val contentHeight = binding.main.height
-            val isResized = rootHeight > 0 &&
-                contentHeight > 0 &&
-                contentHeight + sysInset < rootHeight
             val useImeInset = isImeVisible || imeInset > 0
-            val bottomInset = if (useImeInset) max(imeInset, sysInset) else sysInset
             if (isImeVisible) {
                 isEmojiPanelVisible = false
                 isEmojiPanelRequested = false
                 binding.emojiLayout.isVisible = false
             }
-            binding.inputLayout.translationY = if (useImeInset) -imeInset.toFloat() else 0f
-            binding.main.updatePadding(bottom = baseRootPaddingBottom + sysInset)
-            if (useImeInset && imeInset > 0) {
-                imeScrimDrawable.setBounds(
-                    0,
-                    binding.main.height - imeInset,
-                    binding.main.width,
-                    binding.main.height
-                )
-                binding.main.overlay.remove(imeScrimDrawable)
-                binding.main.overlay.add(imeScrimDrawable)
-            } else {
-                binding.main.overlay.remove(imeScrimDrawable)
+            if (!imeAnimating) {
+                val translation = if (useImeInset) -max(0, imeInset - navInset).toFloat() else 0f
+                binding.inputLayout.translationY = translation
+                if (useImeInset && imeInset > 0) {
+                    imeScrimDrawable.setBounds(
+                        0,
+                        binding.main.height - (imeInset - navInset),
+                        binding.main.width,
+                        binding.main.height
+                    )
+                    binding.main.overlay.remove(imeScrimDrawable)
+                    binding.main.overlay.add(imeScrimDrawable)
+                } else {
+                    binding.main.overlay.remove(imeScrimDrawable)
+                }
             }
+            binding.main.updatePadding(
+                bottom = baseRootPaddingBottom + navInset,
+                top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            )
             insets
         }
         ViewCompat.requestApplyInsets(binding.main)

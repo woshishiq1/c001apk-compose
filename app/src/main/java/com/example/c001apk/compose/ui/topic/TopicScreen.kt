@@ -344,7 +344,7 @@ fun TopicScreen(
                             tabList.forEachIndexed { index, tab ->
                                 Tab(
                                     selected = pagerState.currentPage == index,
-                                    onClick = {
+                                    onClick = rememberHapticClick {
                                         if (pagerState.currentPage == index) {
                                             refreshState = true
                                         }
