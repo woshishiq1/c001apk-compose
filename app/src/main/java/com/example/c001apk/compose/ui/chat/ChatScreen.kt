@@ -120,6 +120,7 @@ fun ChatScreen(
     username: String,
     onViewUser: (String) -> Unit,
     onReport: (String, ReportType) -> Unit,
+    onOpenLink: (String, String?) -> Unit,
 ) {
 
     val viewModel =
@@ -302,6 +303,7 @@ fun ChatScreen(
                                                 onClearFocus()
                                                 onViewUser(uid)
                                             },
+                                            onOpenLink = onOpenLink,
                                             onClearFocus = ::onClearFocus
                                         )
 
@@ -320,6 +322,7 @@ fun ChatScreen(
                                                 onClearFocus()
                                                 onViewUser(uid)
                                             },
+                                            onOpenLink = onOpenLink,
                                             onClearFocus = ::onClearFocus
                                         )
                                 }
@@ -339,7 +342,16 @@ fun ChatScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(cardBg())
-                    .imePadding()
+                    .padding(bottom = androidx.compose.animation.core.animateDpAsState(
+                        targetValue = with(androidx.compose.ui.platform.LocalDensity.current) {
+                            androidx.compose.foundation.layout.WindowInsets.ime.getBottom(this).toDp()
+                        },
+                        animationSpec = androidx.compose.animation.core.spring(
+                            stiffness = androidx.compose.animation.core.Spring.StiffnessHigh,
+                            dampingRatio = androidx.compose.animation.core.Spring.DampingRatioNoBouncy
+                        ),
+                        label = "ChatImeAnimation"
+                    ).value)
                     .windowInsetsPadding(windowInsets.only(WindowInsetsSides.Start + WindowInsetsSides.Bottom)),
                 onPickImage = {
                     onClearFocus()
